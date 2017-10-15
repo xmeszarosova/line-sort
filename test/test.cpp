@@ -3,7 +3,7 @@
 #include "catch.hpp"
 #include "options.h"
 #include "sort.h"
-
+using namespace std;
 #include <sstream>
 
 TEST_CASE("Options")
@@ -16,18 +16,53 @@ TEST_CASE("Options")
 
 	SECTION("reversed")
 	{
+		SECTION("subor")
+		{
+			char * argv[] = { "line-sort", "-r", "text.txt" };
+			auto options = options::parse(3, argv);
+			REQUIRE(options.value() == make_tuple(Order::descending, Filter::all, Case::sensitive, argv[2]));
+		}
+
+		SECTION("vstup")
+		{
+			char * argv[] = { "line-sort", "-r" };
+			auto options = options::parse(2, argv);
+			REQUIRE(options.value() == make_tuple(Order::descending, Filter::all, Case::sensitive, (char *) nullptr));
+		}
 	}
 
 	SECTION("unique")
 	{
+		SECTION("subor")
+		{
+			char * argv[] = { "line-sort", "-u", "text.txt" };
+			auto options = options::parse(3, argv);
+			REQUIRE(options.value() == make_tuple(Order::ascending, Filter::unique, Case::sensitive, argv[2]));
+		}
+
+		SECTION("vstup")
+		{
+			char * argv[] = { "line-sort", "-u" };
+			auto options = options::parse(2, argv);
+			REQUIRE(options.value() == make_tuple(Order::ascending, Filter::unique, Case::sensitive, (char *) nullptr));
+		}
 	}
 
 	SECTION("ignore case")
 	{
-	}
+		SECTION("subor")
+		{
+			char * argv[] = { "line-sort", "-i", "text.txt" };
+			auto options = options::parse(3, argv);
+			REQUIRE(options.value() == make_tuple(Order::ascending, Filter::all, Case::ignore, argv[2]));
+		}
 
-	SECTION("multiple")
-	{
+		SECTION("vstup")
+		{
+			char * argv[] = { "line-sort", "-i" };
+			auto options = options::parse(2, argv);
+			REQUIRE(options.value() == make_tuple(Order::ascending, Filter::all, Case::ignore, (char *) nullptr));
+		}
 	}
 }
 
