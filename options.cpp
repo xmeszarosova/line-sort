@@ -53,11 +53,13 @@ std::optional<std::tuple<Order, Filter, Case, char *>> options::parse(int argc, 
 		}
 		
 
-		else {
-			Order ord;
-			Filter fil;
-			Case cas;
-			return std::make_tuple(order, filter, compare, input); 
-		}
+		//else {
+			//Order ord;
+			//Filter filt;
+			//Case cas;
+			//return std::make_tuple(ord, filt, cas, input); 
+		//}
 	}
+
+	return std::make_tuple(order, filter, compare, input);
 }
