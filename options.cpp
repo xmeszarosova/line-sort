@@ -27,9 +27,6 @@ std::optional<std::tuple<Order, Filter, Case, char *>> options::parse(int argc, 
 	Case compare { Case::sensitive };
 	char * input { nullptr };
 
-	// parse commandline options
-	//if (argc == 2) {
-    //*input = nullptr;
 
 	if (argc == 1)
 		return std::make_tuple(order, filter, compare, input);
@@ -40,25 +37,25 @@ std::optional<std::tuple<Order, Filter, Case, char *>> options::parse(int argc, 
 	vstup == multiple(argv[1], "-");
 
 	for (std::string i : vstup) {
-		if (i == string("-r")) {
+		if (i == std::string("-r")) {
 			order = { Order::descending };
 		}
 
-		 if (i == string("-u")) {
-			filter = { Filter::unique };
+		 if (i == std::string("-u")) {
+			 filter = { Filter::unique };
 		}
 
-		 if (i == string("-i")) {
-			compare = { Case::ignore };
+		 if (i == std::string("-i")) {
+			 compare ={ Case::ignore};
 		}
 		
 
-		//else {
-			//Order ord;
-			//Filter filt;
-			//Case cas;
-			//return std::make_tuple(ord, filt, cas, input); 
-		//}
+		else {
+			Order ord;
+			Filter filt;
+			Case cas;
+			return std::optional<std::tuple<Order, Filter, Case, char *>>();
+		}
 	}
 
 	return std::make_tuple(order, filter, compare, input);

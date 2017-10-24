@@ -8,22 +8,37 @@ using namespace std;
 
 TEST_CASE("Options")
 {
+
 	SECTION("no options")
 	{
 		char * argv[] = { "line-sort" };
 		REQUIRE(options::parse(1, argv) == std::make_tuple(Order::ascending, Filter::all, Case::sensitive, (char *) nullptr));
+		{
+			char * argv[] = { "line-sort" };
+			auto options = options::parse(_countof(argv), argv);
+			REQUIRE(options.has_value());
+			REQUIRE(options == std::make_tuple(Order::ascending, Filter::all, Case::sensitive, (char *) nullptr));
+			}
+		{
+			char * argv[] = { "line-sort", "file.to.open" };
+			auto options = options::parse(_countof(argv), argv);
+			REQUIRE(options.has_value());
+			REQUIRE(options == std::make_tuple(Order::ascending, Filter::all, Case::sensitive, argv[_countof(argv) - 1]));
+			}
 	}
+	
 
 	SECTION("reversed")
 	{
 		SECTION("subor")
 		{
 			char * argv[] = { "line-sort", "-r", "text.txt" };
-			auto options = options::parse(3, argv);
-			REQUIRE(options.value() == make_tuple(Order::descending, Filter::all, Case::sensitive, argv[2]));
+			auto options = options::parse(_countof(argv), argv);
+			REQUIRE(options.has_value());
+			REQUIRE(options == std::make_tuple(Order::descending, Filter::all, Case::sensitive, argv[_countof(argv) - 1]));
 		}
 
-		SECTION("vstup")
+	/*	SECTION("vstup")
 		{
 			char * argv[] = { "line-sort", "-r" };
 			auto options = options::parse(2, argv);
@@ -45,10 +60,10 @@ TEST_CASE("Options")
 			char * argv[] = { "line-sort", "-u" };
 			auto options = options::parse(2, argv);
 			REQUIRE(options.value() == make_tuple(Order::ascending, Filter::unique, Case::sensitive, (char *) nullptr));
-		}
+		}*/
 	}
 
-	SECTION("ignore case")
+	/*SECTION("ignore case")
 	{
 		SECTION("subor")
 		{
@@ -63,8 +78,8 @@ TEST_CASE("Options")
 			auto options = options::parse(2, argv);
 			REQUIRE(options.value() == make_tuple(Order::ascending, Filter::all, Case::ignore, (char *) nullptr));
 		}
-	}
-		SECTION("multiple")
+	}*/
+	/*	SECTION("multiple")
 		{
 			SECTION("subor a 3 moznosti")
 			{
@@ -161,7 +176,7 @@ TEST_CASE("Options")
 			file_content << subor.rdbuf();
 			REQUIRE(file_content.peek() != EOF);
 			subor.close();
-		}
+		}*/
 }
 
 namespace
@@ -206,10 +221,18 @@ TEST_CASE("Sorting")
 
 	SECTION("ascending - unique")
 	{
+		std::ostringstream output{};
+
+		REQUIRE(sort::process(Order::ascending, Filter::unique, Case::sensitive, data::empty, output) == true);
+		REQUIRE(output.str() == "");
 	}
 
 	SECTION("ascending - unique - ignore case")
 	{
+		std::ostringstream output{};
+
+		REQUIRE(sort::process(Order::ascending, Filter::unique, Case::ignore, data::empty, output) == true);
+		REQUIRE(output.str() == "");
 	}
 
 	SECTION("descending")
