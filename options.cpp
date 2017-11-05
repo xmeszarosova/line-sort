@@ -3,7 +3,7 @@
 #include <vector>
 using namespace std;
 
-std::vector<std::string> multiple(char *veta, std::string delimiter)
+/*std::vector<std::string> multiple(char *veta, std::string delimiter)
 {
 	std::vector<std::string> retazec;
 	std::string s = std::string(veta);
@@ -18,11 +18,11 @@ std::vector<std::string> multiple(char *veta, std::string delimiter)
 	}
 
 	return retazec;
-}
+}*/
 
 std::optional<std::tuple<Order, Filter, Case, char *>> options::parse(int argc, char * argv[])
 {
-	Order order { Order::ascending };
+	/*Order order { Order::ascending };
 	Filter filter { Filter::all };
 	Case compare { Case::sensitive };
 	char * input { nullptr };
@@ -57,6 +57,54 @@ std::optional<std::tuple<Order, Filter, Case, char *>> options::parse(int argc, 
 			return std::optional<std::tuple<Order, Filter, Case, char *>>();
 		}
 	}
+
+	return std::make_tuple(order, filter, compare, input);*/
+
+	Order order{ Order::ascending };
+	Filter filter{ Filter::all };
+	Case compare{ Case::sensitive };
+	char * input{ nullptr };
+
+	int pos = 1;
+	for (; pos < argc; ++pos)
+		 {
+		std::string arg = argv[pos];
+		if (arg.empty() || arg[0] != '-')
+			 break;
+		
+			if (arg == "-u")
+			 {
+			if (filter != Filter::all)
+				 return {};
+			filter = Filter::unique;
+			}
+		else if (arg == "-r")
+			 {
+			if (order != Order::ascending)
+				 return {};
+			order = Order::descending;
+			}
+		else if (arg == "-i")
+			 {
+			if (compare != Case::sensitive)
+				 return {};
+			compare = Case::ignore;
+			}
+		else
+			 {
+			return {};
+			}
+		}
+	
+		if (pos < argc)
+		 {
+		input = argv[pos++];
+		}
+	
+		if (pos < argc)
+		 {
+		return {};
+		}
 
 	return std::make_tuple(order, filter, compare, input);
 }
