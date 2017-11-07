@@ -19,19 +19,32 @@ namespace
 	}
 }
 
-bool String(const std::string& sl1, const std::string& sl2) {
 
-	std::string::size_type Length = std::min(sl1.length(), sl2.length());
+bool LessCaseSensitive(const std::string& a, const std::string& b){
+
+	std::string::size_type Length = std::min(a.length(), b.length());
 
 	/*for (std::string::size_type i = 0; i < Length; ++i) {
-		if (sl1[i]) < (sl2[i])) return true;
-		else return false; 
+		if (toupper(a[i]) < toupper((b[i]))) return true;
+		else return false;
 	}*/
 
-	if (sl1.length()<sl2.length())return true;
-	if (sl1.length()>sl2.length())return false;
+	if (a.length()<b.length())return true;
+	if (a.length()>b.length())return false;
 
 	return false;
+}
+
+
+
+bool LessCaseIntensive(const std::string& a, const std::string& b){
+
+	const char * pha = a.c_str();
+	const char * phb = b.c_str();
+
+
+	return false;
+
 }
 
 bool sort::process(Order order, Filter filter, Case compare, std::istream & input, std::ostream & output)
@@ -67,8 +80,10 @@ bool sort::process(Order order, Filter filter, Case compare, std::istream & inpu
 	*/
 
 	if (compare == Case::ignore) {
-		std::sort(lines.begin(), lines.end(), String);
+		std::sort(lines.begin(), lines.end(), LessCaseSensitive);
 	}
+
+
 	else {
 		std::sort(lines.begin(), lines.end());
 	}
