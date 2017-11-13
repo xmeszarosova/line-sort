@@ -17,6 +17,7 @@ int main(int argc, char * argv[])
 
 	Order order;
 	Filter filter;
+	Filtere medzera;
 	Case compare;
 	char * file;
 
@@ -36,7 +37,7 @@ int main(int argc, char * argv[])
 
 	std::istream & input = file ? fs : std::cin;
 
-	if (!sort::process(order, filter, compare, input, std::cout))
+	if (!sort::process(order, filter,medzera, compare, input, std::cout))
 	{
 		// print "sort error"
 		std::cerr << "error" << std::endl;

@@ -20,7 +20,7 @@ using namespace std;
 	return retazec;
 }*/
 
-std::optional<std::tuple<Order, Filter, Case, char *>> options::parse(int argc, char * argv[])
+std::optional<std::tuple<Order, Filter, Filtere, Case, char *>> options::parse(int argc, char * argv[])
 {
 	/*Order order { Order::ascending };
 	Filter filter { Filter::all };
@@ -62,6 +62,7 @@ std::optional<std::tuple<Order, Filter, Case, char *>> options::parse(int argc, 
 
 	Order order{ Order::ascending };
 	Filter filter{ Filter::all };
+	Filtere medzera{ Filtere::nospace };
 	Case compare{ Case::sensitive };
 	char * input{ nullptr };
 
@@ -90,10 +91,16 @@ std::optional<std::tuple<Order, Filter, Case, char *>> options::parse(int argc, 
 				 return {};
 			compare = Case::ignore;
 			}
+		else if (arg == "-e")
+		{
+			if (medzera != Filtere::nospace)
+				return {};
+			medzera = Filtere::space;
+		}
 		else
-			 {
+		{
 			return {};
-			}
+		}
 		}
 	
 		if (pos < argc)
@@ -106,5 +113,5 @@ std::optional<std::tuple<Order, Filter, Case, char *>> options::parse(int argc, 
 		return {};
 		}
 
-	return std::make_tuple(order, filter, compare, input);
+	return std::make_tuple(order, filter, medzera, compare, input);
 }
